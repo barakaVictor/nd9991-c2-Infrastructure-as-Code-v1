@@ -11,7 +11,9 @@ The JSON file for increasing the generic nature of the YAML code. For example, t
 In YAML code, the `${EnvironmentName}` would be substituted with `UdacityProject` accordingly.
 
 ### Instructions before calling create.sh to do the actual deployment
-If you have named profiles in the AWS config and credentials files located in you home directory .aws/ directory,
-be sure to explicitly included the profile name associated with the AWS account being used for the project by explicitly setting the --profile option of the aws command as has been done in create.sh and update.sh.
+If you have named profiles in the AWS config and credentials files located in your home directory .aws/ directory,
+be sure to explicitly included the profile name associated with the AWS account being used for the project by explicitly setting the --profile option of the aws command as has been done in create.sh and update.sh. Otherwise, remove the explicit --profile configuration to use the default profile.
 
-Once that is done, you can proceed and execute the code without any issues.
+Once that is done, you can proceed and execute `./create.sh <stack-name> final-solution.yml parameters-file.json` without any issues.
+
+To tear down the infrastructure, execute `./delete.sh <stack-name>`

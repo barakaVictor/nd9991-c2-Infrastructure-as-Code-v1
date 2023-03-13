@@ -1,0 +1,2 @@
+load balancer url: http://udagr-appli-1qkvamz6e02ct-1334127840.us-east-1.elb.amazonaws.com/
+udagram app url: http://udagr-appli-1qkvamz6e02ct-1334127840.us-east-1.elb.amazonaws.com/udagram

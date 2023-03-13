@@ -285,7 +285,9 @@ Resources:
                 Action:
                   - s3:Get*
                   - s3:List*
-                Resource: arn:aws:s3:::cf-templates-uaon2ygih33g-us-east-1/*
+                Resource:
+                  - arn:aws:s3:::10980623463-udagram-bucket
+                  - arn:aws:s3:::10980623463-udagram-bucket/*
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} S3 Access Role
@@ -317,10 +319,13 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           sudo apt-get update -y
+          sudo apt-get install unzip awscli -y
           sudo apt-get install apache2 -y
           sudo systemctl start apache2.service
+          sudo systemctl enable apache2
           cd /var/www/html
-          echo "Udacity Demo Web Server Up and Running!" > index.html
+          aws s3 cp s3://10980623463-udagram-bucket/udagram.zip .
+          unzip -o udagram.zip
 
     #Create a target group that the load balancer will use to distribute
   #traffic
@@ -351,6 +356,7 @@ Resources:
 
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: InternetGatewayAttachment
     Properties:
       Subnets:
         - !Ref PublicSubnet1
@@ -404,22 +410,3 @@ Outputs:
     Value: !Join [ "", [ 'http://', !GetAtt ApplicationLoadBalancer.DNSName ]]
     Export:
       Name: !Sub ${EnvironmentName}-LoadBalancer-URL
-
-  # This is also optional.
-  # Bonus points for useful outputs!
-  # for example, if you create a Load Balancer
-  # it's nice to output the URL to it here, so that we don't have to go to the console to get it.
-
-# Sample UserData
-# When creating your Launch Configuration, you may need a UserData script
-# here's one that you can use for Ubuntu Linux that will:
-# Install Apache Web Server, Start it, and create an index.html that will be displayed
-# when you visit the IP address of this server with your web browser
-#Here it is:
-#
-#          #!/bin/bash
-#          apt-get update -y
-#          apt-get install apache2 -y
-#          systemctl start apache2.service
-#          cd /var/www/html
-#          echo "Udacity Demo Web Server Up and Running!" > index.html
